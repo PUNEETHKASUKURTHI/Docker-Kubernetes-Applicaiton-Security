@@ -1,0 +1,45 @@
+For the 2nd part of the assignment ie. 
+
+As suggested in the instructions i checked the views.py file,
+Here i found that while using prometheus monitoring statements the "Passwords" are getting printed out
+
+"THe total number of times(pword)was used" is being printed , so make the passwords safe I found out the code thats doing this in the views.py and removed it
+
+As per part 2.2 to add an additional parameter to monitor the server, I used
+ increment through counter such that it could return "Number of times 404 msg is returned" when ever there is a "database_error_return_404" database_error_return_404
+ graphs['database_error_return_404'].inc() 
+
+
+Installing prometheus I used helm to install prometheus
+
+Installing helm
+
+I searched in google used the following commands to install helm
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+ after this the repo gets added into our database and to update I used
+helm repo update
+
+later on to continue the installing I used the following command
+
+helm install prometheus-community/prometheus --generate-name 
+and this successfully installed prometheus
+
+To check its working i checked pods.
+
+"kubectl get pods" and found out that Prometheus is successfully running
+ and kubectl get serices and found out that these are running
+ prometheus-alertmanager   1      60s
+ prometheus-server         5      60s
+
+To find out the prometheus process config I used kubectlget config and later to edit and put those into a .yaml files I used 
+
+kubectl edit configmap prometheus-server 
+kubectl get configmap prometheus-alertmanager -o yaml 
+
+edited the server with the local host in target of prometheus as port 9090 to “proxy-service:8080” as mentioned in the instructions
+
+
+At the end to check the Prometheus monitoring system and deploy it I forwarded the port as mentioned in the instructions
+
+kubectl port-forward deployment/prometheus-server and we can see that prometheus running in website and monitoring various activities
